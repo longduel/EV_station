@@ -4,7 +4,6 @@ import base64
 from kivymd.uix.stationdetails import ListMDDialog
 from tourist_location import SearchTourist
 from full_screen_picture import Full_screen_picture
-from kivy.network.urlrequest import UrlRequest
 
 
 class LocationPopUp(ListMDDialog):
@@ -16,6 +15,10 @@ class LocationPopUp(ListMDDialog):
 
         # slicing the first element in the tuple that is the int kivy is only accepting the str
         station_data = station_data[1:]
+
+        # Take lat and lon for the reference in the Tourist search window
+        self.lat = station_data[22]
+        self.lon = station_data[23]
 
         # Set all the fields of market data
         headers = "Name,Availability,Picture_Dir,Address,Service_contact,Type2,CCS,CHAdeMO,Type2_Voltage,CCS_Voltage,CHAdeMO_Voltage,Type2_num_plugs,CCS_num_plugs,CHAdeMO_num_plugs,Real_time_plug_in_availability,Parking_Slots,Operation_Hours,Price_Parking,Instruction_of_use,Play_Store_Icon,Play_Store_App,Additional_info"
@@ -52,7 +55,7 @@ class LocationPopUp(ListMDDialog):
             setattr(self, attribute_picture_name, attribute_pictures_value)
 
     def tourist_search(self):
-        tourist_menu = SearchTourist()
+        tourist_menu = SearchTourist(self.lat, self.lon)
         tourist_menu.open()
 
     def full_view_picture(self):
