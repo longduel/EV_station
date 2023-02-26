@@ -1,0 +1,258 @@
+#:kivy 2.1.0
+#:gettext
+# Root widgets they need to be first so the ScreenManger can load them in
+WindowManager:
+    FirstWindow
+    SecondWindow
+
+<FirstWindow>:
+    name: "first" # defines the window id for ScreenManager
+    _ = gettext.gettext
+    BoxLayout:
+        orientation: "vertical"
+        # Setting up the custom background image
+        canvas:
+            Rectangle:
+                pos: self.pos
+                size: self.size
+                source: 'assets/image/Scroll Group 1.png'
+
+
+        Label:
+            text: "EV Lodz"
+            font_size: 32
+            background_color: 0,0,0,0
+
+
+        Button:
+            #text: "STATION MAP"
+            background_normal: 'assets/image/Button.png'
+            #pos_hint:{"x":0.5, "y":0.5} # kinda works
+            #keep_ratio: False
+            allow_stretch: True
+            Label:
+                text: "EV Lodz"
+                font_size: 32
+                background_color: 0,0,0,0
+
+        Button:
+            text: "SEARCH STATION"
+            background_normal: 'assets/image/Button.png'
+            #keep_ratio: False
+            allow_stretch: True
+
+        Button:
+            text: "NEW STATION"
+            background_normal: 'assets/image/Button.png'
+            #keep_ratio: False
+            allow_stretch: True
+
+        Image:
+            source: 'assets/image/Bottom.png'
+            #keep_ratio: False
+            allow_stretch: True
+        Label:
+        text: tr._('Hello World')
+
+    BoxLayout:
+        size_hint_y: None
+        height: '48dp'
+        spacing: '2dp'
+        padding: '3dp'
+
+        Button:
+            text: tr._('French')
+            on_release: app.lang = 'fr'
+
+        Button:
+            text: tr._('English')
+            on_release: app.lang = 'en'
+<SecondWindow>:
+    name: "second" # defines the window id for ScreenManager
+
+    MDRaisedButton:
+        text: "12345"
+        pos_hint: {"center_x": .7, "center_y": .5}
+        on_release:
+            app.root.current = "first"
+            root.manager.transition.direction = "right"
+
+    Image:
+        source: 'assets/image/Button.png'
+                pos_hint: {"y": 0.4}
+                # create a button 50% of the width and 25% of the height of the layout and positioned at (20, 20)
+                #size_hint: 1, 1
+                # pos_hint = {"x":1, "y":1, "left":1, "right":1, "top":1, "bottom":1}
+                # first variable x, second y
+                #pos: (200, 400)
+
+    MDRoundFlatIconButton:
+            text: "SEARCH STATION"
+            font_size: "18sp"
+            font_name: "assets/fonts/DoulosSILR"
+            text_color: "white"
+            #md_bg_color: "green"
+            pos_hint: {"center_x": .5, "center_y": .65}
+            size_hint: 0.8, 0.1
+
+
+             # Third Button Image
+        Image:
+            source: 'assets/image/Button.png'
+            pos_hint: {"y": 0.4}
+
+        MDRectangleFlatIconButton:
+            id: new_station
+            text: "NEW STATION"
+            icon: "language-python"
+            line_color: 0, 0, 0, 0
+            pos_hint: {"center_x": .5, "center_y": .4}
+        # Bottom Page Image
+        #Image:
+            #source: 'assets/image/Bottom.png'
+            #pos_hint: {"x": 0.01}
+
+
+            MDIconButton:
+            icon: "assets/image/arrow_back.png"
+            icon_size: "40sp"
+            icon_color: app.theme_cls.primary_color
+            pos_hint: {"center_x": .12, "center_y": .94}
+            on_release:
+                app.root.current = "main"
+                root.manager.transition.direction = "right"
+
+
+    name: "map" # defines the window id for ScreenManager
+
+    FloatLayout:
+        MapView:
+            lat: 51.759445
+            lon: 19.457216
+            zoom: 10
+            double_tap_zoom: True
+            snap_to_zoom: False
+            on_zoom:
+                root.zoom = 10 if root.zoom < 10 else root.zoom
+            on_lat:
+                root.set_station_markers()
+            on_lon:
+                root.set_station_markers()
+        Image:
+            source: 'assets/image/Map_top.png'
+            pos_hint: {"y": 0.45}
+            #size_hint_x: -0.3
+            #size_hint_y: 1.2
+            allow_stretch: True
+
+        MDIconButton:
+            icon: "assets/image/arrow_back.png"
+            icon_size: "40sp"
+            icon_color: app.theme_cls.primary_color
+            pos_hint: {"center_x": .12, "center_y": .94}
+            on_release:
+                app.root.current = "main"
+                root.manager.transition.direction = "right"
+
+        MDLabel:
+            id: calc_input
+            text: "STATION MAP"
+            font_size: "20sp"
+            font_name: "assets/fonts/Poppins-Regular.ttf"
+            pos_hint: {"x": 0.3, "y": 0.44}
+
+
+        # Setting up the custom background image
+        canvas:
+            Rectangle:
+                pos: self.pos
+                size: self.size
+                source: 'assets/image/Scroll Group 1.png'
+
+
+                <MapWindow>:
+    name: "map" # defines the window id for ScreenManager
+    MapView:
+        lat: 51.759445
+        lon: 19.457216
+        zoom: 10
+        double_tap_zoom: True
+        snap_to_zoom: False
+        on_zoom:
+            self.zoom = 10 if self.zoom < 10 else self.zoom
+        on_lat:
+            root.set_station_markers()
+        on_lon:
+            root.set_station_markers()
+
+    Image:
+        source: 'assets/image/Map_top.png'
+        pos_hint: {"y": 0.45}
+        #size_hint_x: -0.3
+        #size_hint_y: 1.2
+        allow_stretch: True
+
+    MDLabel:
+        id: calc_input
+        text: "STATION MAP"
+        font_size: "20sp"
+        font_name: "assets/fonts/Poppins-Regular.ttf"
+        pos_hint: {"x": 0.3, "y": 0.44}
+
+    MDIconButton:
+        icon: "assets/image/arrow_back.png"
+        icon_size: "40sp"
+        icon_color: app.theme_cls.primary_color
+        pos_hint: {"center_x": .12, "center_y": .94}
+        on_release:
+            app.root.current = "main"
+            root.manager.transition.direction = "right"
+
+
+        if re.fullmatch(regex_full_name, name) is None:
+            test = re.fullmatch(regex_full_name, name)
+            print(test)
+            print('OK')
+        else:
+            print("Invalid name")
+            self.popup_invalid_submit(valid_name_text, 0.8)
+        if re.fullmatch(regex_email, user_email):
+            print('OK')
+        else:
+            print("Invalid name")
+            self.popup_invalid_submit(valid_email_text, 0.66)
+        if selected != 'Pick Query':
+            print('OK')
+        else:
+            print("Invalid name")
+            self.popup_invalid_submit(valid_choice_spinner, 0.52)
+        if additional_n != '':
+            print('OK')
+            return True
+        else:
+            print("Invalid name")
+            self.popup_invalid_submit(valid_additional_text, 0.38)
+
+BoxLayout:
+    orientation: "horizontal"
+    Carousel:
+        direction: 'right'
+        Image:
+            source: 'assets/image/picture1.png'
+        Image:
+            source: 'assets/image/picture2.png'
+        Image:
+            source: 'assets/image/picture3.png'
+        AsyncImage:
+            source: 'assets/image/picture3.png'
+
+import mysql.connector
+            # Create connection to mysql database of choice
+    mydb = mysql.connector.connect(
+        host='localhost',
+        user='root',
+        password='',
+        database='ev_station'
+    )
+    # Create a cursor
+    c = mydb.cursor()

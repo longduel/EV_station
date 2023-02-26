@@ -1,0 +1,67 @@
+Create New Enviroment:
+	python -m virtualenv kivy_test
+Activate in Windows terminal:
+	kivy_test\Scripts\activate 
+
+Install Full version:
+	python -m pip install "kivy[full]" kivy_examples
+Testing Demo:
+	python kivy_test\share\kivy-examples\demo\showcase\main.py
+
+Package the app to executable:
+	pip install pyinstaller
+	pyinstaller basic_cal.py -w
+
+Google API library installation:
+    pip install -U googlemaps
+
+Install Kivy MD:
+	pip install kivymd
+# name of the file is for design is the same one as the main App class to build
+# MAKE SPACES USING TAB BUTTON !!!!!
+# root will take effect on the all the collumns
+
+# It requires the concurrent.futures and requests. If you use it on Android / iOS, 
+# don't forget to add openssl as a requirements, 
+# otherwise you'll have an issue when importing urllib3 from requests.
+
+Email address from witch send the app:
+EV.lodz.dev@gmail.com
+HPTkf*yTx#%i4BZot9kEi@
+App password: arnjaabpvjdbokhc
+
+Support email that will receive the message:
+EV.lodz.help@gmail.com
+TqPfUDYqkB3$gw6RNu2oVY
+
+TomTom API Key
+zCpuwvrwEAEBu5iLj37wHDu3ZNbmGL3W
+
+ you should add openssl to your buildozer's requirements
+
+ SQL table hierarchy
+ pip install mysql-connector-python
+MDLabel
+1. root.title - Nazwa na podstawie addressu
+2. karuzela ze zdjeciami (trzeba dodac hosting zdjec i lokalizcaje konkretna dostepu do zdjec)
+Details
+3. thinlabel address - pelny addres
+4. thinlabel numer kontaktowy
+	Plugs Label
+	1.Plugs tablica od gory do dolu po lewej nazwa i symbol wtyczki
+	2.po prawej od wtyczki ile jest dostepnych wtyczek ilosc JESLI NIE MA TO W TYM MIEJSU N/A
+	3.Jakie napiecie po prawej od ilosc wtyczek
+	4.czy jest wolna jaka zaplata po lewejs tronie
+4.Operational hours
+5.Price Parking
+6.Instruction of use
+7.Additional Info
+
+You can add the root.dismiss() under the button on_release to close the window
+
+save excel file as the csv with ft 8 rozdzielnay przecinkami
+Otworz przez notatnik a potem sprawdz czy nie ma dziwnej koncowki
+Otworz DB Browser
+Stworz plim database
+Import csv jako nowa tebela zaznacz ze pierwszy row to nazwy kolumn
+zaznac rozdzielenie przez ';'
