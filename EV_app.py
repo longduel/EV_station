@@ -26,9 +26,10 @@ class MapWindow(Screen, MapView, DBConnection):
     get_station_timer = None
     search_menu = None
     station_name = []
-    # Weird bug with the WindowManager when changing from Main Screen
-    # using button the map is changing the lan,lon to the left
-    # wrote this to manually center on page load
+
+    # Return the size of the window so the map can dynamically resize and center on the specified position
+    def get_size(self):
+        return Window.size
 
     def centers_map(self):
         self.lat = 51.759445

@@ -2,8 +2,8 @@
 #:import MapView kivy_garden.mapview
 # Root widgets they need to be first so the ScreenManger can load them in
 WindowManager:
-    MapWindow
     MainWindow
+    MapWindow
     NewStationWindow
     StationWindow
     AboutWindow
@@ -75,7 +75,7 @@ WindowManager:
         # First Button Image
         Image:
             source: 'assets/image/Button.png'
-            pos_hint: {"y": 0.14}
+            pos_hint: {"center_y": 0.62}
 
         MDRectangleFlatIconButton:
             id: station_map
@@ -84,31 +84,15 @@ WindowManager:
             font_name: "assets/fonts/Geddes_Bold.otf"
             icon: "lightning-bolt"
             line_color: 0, 0, 0, 0
-            pos_hint: {"center_x": 0.5, "center_y": 0.65}
+            pos_hint: {"center_x": 0.5, "center_y": 0.63}
             on_release:
                 app.root.current = "map"
                 root.manager.transition.direction = "left"
+
         # Second Button Image
         Image:
             source: 'assets/image/Button.png'
-            pos_hint: {"center_y": 0.45}
-
-        MDRectangleFlatIconButton:
-            id: search_station
-            text: "SEARCH STATION"
-            font_size: "20sp"
-            font_name: "assets/fonts/Geddes_Bold.otf"
-            icon: "magnify-plus-outline"
-            line_color: 0, 0, 0, 0
-            pos_hint: {"center_x": 0.5, "center_y": 0.46}
-            on_release:
-                app.root.current = "search_station"
-                root.manager.transition.direction = "left"
-
-        # Third Button Image
-        Image:
-            source: 'assets/image/Button.png'
-            pos_hint: {"center_y": 0.26}
+            pos_hint: {"center_y": 0.42}
 
         MDRectangleFlatIconButton:
             id: new_station
@@ -117,7 +101,7 @@ WindowManager:
             font_name: "assets/fonts/Geddes_Bold.otf"
             icon: "map-plus"
             line_color: 0, 0, 0, 0
-            pos_hint: {"center_x": 0.5, "center_y": 0.28}
+            pos_hint: {"center_x": 0.5, "center_y": 0.43}
             on_release:
                 app.root.current = "new_station"
                 root.manager.transition.direction = "left"
@@ -147,6 +131,10 @@ WindowManager:
     name: "map" # defines the window id for ScreenManager
     on_pre_enter:
         root.centers_map()
+
+    size_hint: None, None
+    size: root.get_size()
+
     lat: 51.759445
     lon: 19.457216
     zoom: 10
