@@ -91,7 +91,16 @@ class StationWindow(Screen, DBConnection):
 
 # Define About Page
 class AboutWindow(Screen):
-    pass
+    def show_contact_details(self):
+        popup = Popup(
+            title='Feel free to contact us via email if you have any questions:\n\nEV.lodz.help@gmail.com',
+            background_color=(0, 1, 0, 1),
+            separator_color=(0, 0, 0, 0),
+            # opacity=0.5,
+            title_align='center',
+            size_hint=(0.7, 0.25),
+            pos_hint={'center_x': 0.5, 'center_y': 0.5})
+        popup.open()
 
 
 # Define Search Station Page

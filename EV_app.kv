@@ -342,25 +342,59 @@ WindowManager:
                 root.manager.transition.direction = "up"
 
         MDLabel:
-            text: "ABOUT PAGE"
+            text: "ABOUT THIS PROJECT"
             font_size: "20sp"
             font_name: "assets/fonts/NotoSansSymbols-VariableFont_wght.ttf"
-            pos_hint: {"x": 0.3, "y": 0.445}
+            pos_hint: {"x": 0.18, "y": 0.445}
 
         MDCard:
-            size_hint: .8, .55
-            pos_hint: {"center_x": 0.5, "center_y": 0.55}
+            size_hint: .8, .45
+            pos_hint: {"center_x": 0.5, "center_y": 0.6}
             elevation: 1
             md_bg_color: "lightgreen"
             padding: 25
             spacing: 25
             orientation: "vertical"
 
-        MDLabel:
-            text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-            font_size: "16sp"
-            halign: "center"
-            font_name: "assets/fonts/NotoSansSymbols-VariableFont_wght.ttf"
+            MDLabel:
+                markup: True
+                text: "[i]Application with a map of the electric vehicle charging stations available within the Polish city of Lodz.[/i]"
+                font_size: "13sp"
+                halign: 'center'
+                #font_name: "assets/fonts/Poppins-Regular.ttf"
+                size_hint: (1, 0.3)
+                pos_hint: {"center_x": 0.5, "center_y": 0.6}
+
+            MDLabel:
+                text: "This piece of software was based on the cross-platform GUI framework Kivy for Python language, created as a part of the engineering thesis."
+                font_size: "10sp"
+                halign: 'left'
+                font_name: "assets/fonts/Poppins-Regular.ttf"
+                size_hint: (1, 0.5)
+                #pos_hint: {"center_x": 0.2, "center_y": 0.5}
+
+            MDSeparator:
+
+            MDLabel:
+                text: "© 2023"
+                font_size: "10sp"
+                size_hint: (0.2, 0.05)
+                font_name: "assets/fonts/NotoSansSymbols-VariableFont_wght.ttf"
+                pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+        MDIconButton:
+            icon: 'assets/image/Githubicon.png'
+            icon_size: "70sp"
+            pos_hint: {"center_x": 0.65, "center_y": 0.28}
+            on_release:
+                webbrowser.open('https://github.com/longduel')
+
+        MDIconButton:
+            icon: 'assets/image/Gmailicon.png'
+            icon_size: "70sp"
+            pos_hint: {"center_x": 0.35, "center_y": 0.28}
+            on_release:
+                root.show_contact_details()
 
         Image:
             source: 'assets/image/Bottom1.png'
