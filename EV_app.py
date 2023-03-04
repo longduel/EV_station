@@ -31,6 +31,12 @@ class MapWindow(Screen, MapView, DBConnection):
     def get_size(self):
         return Window.size
 
+    def center_on_gps_location(self):
+        # Get the lon and center values from the function arguments
+        self.lat = 51.759445
+        self.lon = 19.657216
+        self.zoom = 15
+
     def centers_map(self):
         self.lat = 51.759445
         self.lon = 19.457216

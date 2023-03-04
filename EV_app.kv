@@ -1,5 +1,7 @@
 #:kivy 2.1.0
 #:import MapView kivy_garden.mapview
+#:import GpsBlinker gps_blinker.GpsBlinker
+#:include gps_blinker.kv
 # Root widgets they need to be first so the ScreenManger can load them in
 WindowManager:
     MainWindow
@@ -148,6 +150,11 @@ WindowManager:
     on_lon:
         root.set_station_markers()
 
+    GpsBlinker:
+        lat: root.lat
+        lon: root.lon
+        id: blinker
+
     Image:
         source: 'assets/image/Map_top.png'
         pos_hint: {"y": 0.45}
@@ -179,6 +186,12 @@ WindowManager:
         on_release:
             root.search_stations()
 
+    MDIconButton:
+        icon: "assets/image/GPS_icon.png"
+        icon_size: "60sp"
+        pos_hint: {"center_x": 0.87, "center_y": 0.11}
+        on_release:
+            root.center_on_gps_location()
 
 <SearchStation>
     name: "search_station" # defines the window id for ScreenManager
