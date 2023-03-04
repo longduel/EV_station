@@ -12,6 +12,7 @@ from database_connector import DBConnection
 from station_maker import StationMarker
 from send_email import SendEmail
 from search_stations import SearchPopup
+from gps_blinker import GpsBlinker
 # Remove after testing to get the dynamic view
 Window.size = (300, 500)  # Using the kivy.core.window set up the dynamic screen size
 
@@ -21,7 +22,7 @@ class MainWindow(Screen):
     pass
 
 # Define Map Page
-class MapWindow(Screen, MapView, DBConnection):
+class MapWindow(Screen, MapView, DBConnection,GpsBlinker):
 
     get_station_timer = None
     search_menu = None
@@ -31,11 +32,85 @@ class MapWindow(Screen, MapView, DBConnection):
     def get_size(self):
         return Window.size
 
+    # Stupid GPS Implementation that is breaking everything
+    # Get a reference to GpsBlinker, then call blink()
+    def gps_postion(self):
+        test = GpsBlinker()
+
+        # Start blinking the GpsBlinker
+        test.blink()
+
+
+    """
+    # Get a reference to GpsBlinker, then call blink()
+    def gps_postion(self):
+        home_gps_blinker = self.ids.blinker
+
+        # Start blinking the GpsBlinker
+        home_gps_blinker.blink()
+
+    # Request permissions on Android
+        if platform == 'android':
+            from android.permissions import Permission, request_permissions
+            def callback(permission, results):
+                if all([res for res in results]):
+                    print("Got all permissions")
+                    from plyer import gps
+                    gps.configure(on_location=self.update_blinker_position, on_status=self.on_auth_status)
+                    gps.start(minTime=1000, minDistance=1)
+                else:
+                    print("Did not get all permissions")
+
+            request_permissions([Permission.ACCESS_COARSE_LOCATION,
+                                 Permission.ACCESS_FINE_LOCATION], callback)
+    def update_blinker_position(self, *args, **kwargs):
+        my_lat = 51.759445
+        my_lon = 19.657216
+
+        print("GPS POSITION", my_lat, my_lon)
+        # Update GpsBlinker position
+        home_gps_blinker = self.ids.blinker
+        home_gps_blinker.lat = my_lat
+        home_gps_blinker.lon = my_lon
+
+        # if this will not be uncommented there is a wierd bug that is blinking weird
+        # Center map on gps
+        if not self.has_centered_map:
+            map2 = home_gps_blinker = self.ids.mapview
+            map2.center_on(my_lat, my_lon)
+            self.has_centered_map = True
+
+        MDApp.get_running_app().current_lat = my_lat
+        MDApp.get_running_app().current_lon = my_lon
+
+    def on_auth_status(self, general_status, status_message):
+        if general_status == 'provider-enabled':
+            pass
+        else:
+            print("Open gps access popup")
+            try:
+                self.open_gps_access_popup()
+            except:
+                print("error")
+                pass
+
+    def open_gps_access_popup(self):
+        if not self.dialog:
+            self.dialog = "STOP"
+            Clock.schedule_once(self.run_dialog, 2)
+
+    def run_dialog(self, *args):
+        self.dialog = MDDialog(title="GPS Error", text="You need to enable GPS access for the app to function properly",
+                               size_hint=(0.5, 0.5))
+        self.dialog.pos_hint = {'center_x': .5, 'center_y': .5}
+        self.dialog.open()
+        self.dialog = None
+    """
     def center_on_gps_location(self):
         # Get the lon and center values from the function arguments
         self.lat = 51.759445
-        self.lon = 19.657216
-        self.zoom = 15
+        self.lon = 19.557216
+        self.zoom = 13
 
     def centers_map(self):
         self.lat = 51.759445

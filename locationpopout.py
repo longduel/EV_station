@@ -31,11 +31,18 @@ class LocationPopUp(ListMDDialog):
         path = "assets//station_photo//1"
         picture_dir = os.listdir(station_data[2])
 
-        picture_1 = f'{station_data[2]}//{picture_dir[0]}'
-        picture_2 = f'{station_data[2]}//{picture_dir[1]}'
-        picture_3 = f'{station_data[2]}//{picture_dir[2]}'
+        try:
+            picture_1 = f'{station_data[2]}//{picture_dir[0]}'
+            picture_2 = f'{station_data[2]}//{picture_dir[1]}'
+            picture_3 = f'{station_data[2]}//{picture_dir[2]}'
 
-        self.picture_locations = (picture_1, picture_2, picture_3)
+            self.picture_locations = (picture_1, picture_2, picture_3)
+        except IndexError:
+            picture_1 = f'{station_data[2]}//{picture_dir[0]}'
+            picture_2 = f'{station_data[2]}//{picture_dir[1]}'
+
+            self.picture_locations = (picture_1, picture_2)
+            print('Lest pictures than 3')
 
         if station_data[14] != 'NO':
             how_many_available = self.plugs_availability_rt(station_data[14], station_data[11])
