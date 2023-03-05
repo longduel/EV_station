@@ -1,12 +1,13 @@
 #:kivy 2.1.0
 #:import MapView kivy_garden.mapview
 #:import GpsBlinker gps_blinker.GpsBlinker
+#:import RV search_station.RV
 #:include gps_blinker.kv
-#:include search_station.kv
 # Root widgets they need to be first so the ScreenManger can load them in
 WindowManager:
-    MapWindow
+    SearchWindow
     MainWindow
+    MapWindow
     NewStationWindow
     AboutWindow
 
@@ -114,13 +115,15 @@ WindowManager:
     name: "map" # defines the window id for ScreenManager
     on_pre_enter:
         root.centers_map()
+    #on_enter:
+    #    root.center_search()
 
     size_hint: None, None
     size: root.get_size()
 
-    lat: 51.759445
-    lon: 19.457216
-    zoom: 10
+    #lat: 51.759445
+    #lon: 19.457216
+    #zoom: 10
 
     double_tap_zoom: True
     snap_to_zoom: False
@@ -167,7 +170,8 @@ WindowManager:
         icon_color: app.theme_cls.primary_color
         pos_hint: {"center_x": .90, "center_y": .94}
         on_release:
-            root.open_search_window()
+            app.root.current = "search"
+            root.manager.transition.direction = "up"
 
     MDIconButton:
         icon: "assets/image/GPS_icon.png"
@@ -175,6 +179,46 @@ WindowManager:
         pos_hint: {"center_x": 0.87, "center_y": 0.11}
         on_release:
             root.center_on_gps_location()
+
+<SelectedButton>
+    on_release:
+        app.root.current = "map"
+        root.return_coordinates()
+
+<SearchWindow>
+    name: "search"
+    Image:
+        source: 'assets/image/Top1.png'
+        size_hint: (1,0.2)
+        pos_hint: {"center_x": .5, "center_y": .94}
+        keep_ratio: False
+        allow_stretch: True
+        orientation: 'vertical'
+    BoxLayout:
+        orientation: 'vertical'
+        MDIconButton:
+            icon: "assets/image/arrow_up.png"
+            icon_size: "40sp"
+            icon_color: app.theme_cls.primary_color
+            pos_hint: {"center_x": .5, "center_y": .94}
+            on_release:
+                app.root.current = "map"
+                root.manager.transition.direction = "down"
+        MDTextField:
+            size_hint_y: None
+            mode: "fill"
+            fill_color: 0, 0, 0, .4
+            hint_text: 'Enter name of the station:'
+            on_text: rv.search_rv(self.text)
+        RV:
+            id: rv
+            viewclass: 'SelectedButton'
+            RecycleBoxLayout:
+                orientation: 'vertical'
+                default_size: None, 48
+                default_size_hint: 1, None
+                size_hint_y: None
+                height: self.minimum_height
 
 <NewStationWindow>
     name: "new_station"

@@ -5,13 +5,14 @@ from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy_garden.mapview import MapView
 from kivy.uix.popup import Popup
+from kivymd.uix.button import MDFlatButton
 from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.properties import StringProperty, NumericProperty
 # Classes to inherit
 from database_connector import DBConnection
 from station_maker import StationMarker
 from send_email import SendEmail
 from gps_blinker import GpsBlinker
-from search_station import SearchPopupMenu
 # Remove after testing to get the dynamic view
 Window.size = (300, 500)  # Using the kivy.core.window set up the dynamic screen size
 
@@ -20,6 +21,23 @@ Window.size = (300, 500)  # Using the kivy.core.window set up the dynamic screen
 class MainWindow(Screen):
     pass
 
+class SearchWindow(Screen):
+    pass
+
+# Define Button that is on the search list and will return the lat and lon to the map widget
+class SelectedButton(MDFlatButton, DBConnection):
+
+    # Return the position of the chosen place when the button is pressed
+    def return_coordinates(self):
+        print(self.text)
+
+        self.c.execute(f"SELECT * FROM stations_ev WHERE Name LIKE '%{self.text}%'")
+        station = self.c.fetchall()
+        lan = station[0][23]
+        lon = station[0][24]
+
+        search_lan = NumericProperty(lan)
+        search_lon = NumericProperty(lon)
 
 # Define Map Page
 class MapWindow(Screen, MapView, DBConnection, GpsBlinker):
@@ -27,14 +45,12 @@ class MapWindow(Screen, MapView, DBConnection, GpsBlinker):
     get_station_timer = None
     search_menu = None
     station_name = []
-
+    search_lan = NumericProperty(0)
+    search_lon = NumericProperty(0)
     # Return the size of the window so the map can dynamically resize and center on the specified position
     def get_size(self):
         return Window.size
 
-    def open_search_window(self):
-        search_menu = SearchPopupMenu()
-        search_menu.open()
 
     # Stupid GPS Implementation that is breaking everything
     # Get a reference to GpsBlinker, then call blink()
@@ -108,6 +124,14 @@ class MapWindow(Screen, MapView, DBConnection, GpsBlinker):
         self.dialog.open()
         self.dialog = None
     """
+    def center_search(self):
+
+        self.search_lan = self.manager.get_screen('search').search_lan
+        self.search_lon = self.manager.get_screen('search').search_lon
+        self.lat = self.search_lan
+        self.lon = self.search_lon
+        self.zoom = 13
+
     def center_on_gps_location(self):
         # Get the lon and center values from the function arguments
         self.lat = 51.759445
