@@ -2,14 +2,13 @@
 #:import MapView kivy_garden.mapview
 #:import GpsBlinker gps_blinker.GpsBlinker
 #:include gps_blinker.kv
+#:include search_station.kv
 # Root widgets they need to be first so the ScreenManger can load them in
 WindowManager:
-    MainWindow
     MapWindow
+    MainWindow
     NewStationWindow
-    StationWindow
     AboutWindow
-    SearchStation
 
 <GpsBlinker>:
     default_blink_size: 25
@@ -35,53 +34,6 @@ WindowManager:
             size: [root.default_blink_size, root.default_blink_size]
             pos: [root.pos[0] + root.size[0]/2.0 - root.default_blink_size/2.0, root.pos[1] + root.size[1]/2.0 - root.default_blink_size/2.0]
 
-<StationWindow>
-    #REMOVE CLASS WHEN DONE!!!!!!!!!!
-    name: "station"
-    ScrollView:
-        do_scroll_x: False
-        do_scroll_y: True
-        #size_hint: (0.5, 0.5)
-        #pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-        BoxLayout:
-            orientation: "vertical"
-            size_hint_y: None
-            height: 1000
-            BoxLayout:
-                orientation: "horizontal"
-                MDLabel:
-                    id: calc_input
-                    text: "STATION MAP"
-                    font_size: "20sp"
-                    font_name: "assets/fonts/Poppins-Regular.ttf"
-                    pos_hint: {"x": 0.3, "y": 0.44}
-                Label:
-                    id: station_text
-                    text: "check SQL"
-                    color: (0,1,0,1)
-                Button:
-                MDCard:
-                    size_hint: .8, .55
-                    pos_hint: {"center_x": 0.5, "center_y": 0.55}
-                    elevation: 1
-                    md_bg_color: "lightgreen"
-                    padding: 25
-                    spacing: 25
-                    orientation: "vertical"
-                    Label:
-                        id: station_text
-                        text: "check SQL"
-                        color: (0,1,0,1)
-            MDCard:
-                size_hint: .8, .55
-                pos_hint: {"center_x": 0.5, "center_y": 0.55}
-                elevation: 1
-                #md_bg_color: "lightgreen"
-                padding: 25
-                spacing: 25
-                orientation: "vertical"
-                #on_release: root.get_name()
-
 <MainWindow>:
     name: "main" # defines the window id for ScreenManager
     FloatLayout:
@@ -97,11 +49,16 @@ WindowManager:
         # Top Page Image
         Image:
             source: 'assets/image/Top1.png'
-            pos_hint: {"center_y": 0.9}
+            pos_hint: {"center_y": 0.94}
         # First Button Image
         Image:
             source: 'assets/image/Button.png'
-            pos_hint: {"center_y": 0.62}
+            pos_hint: {"center_y": 0.65}
+        # Logo Icon
+        Image:
+            source: 'assets/image/Logo_icon.png'
+            size_hint: (0.3,0.3)
+            pos_hint: {"center_x": 0.5, "center_y": 0.24}
 
         MDRectangleFlatIconButton:
             id: station_map
@@ -110,7 +67,7 @@ WindowManager:
             font_name: "assets/fonts/Geddes_Bold.otf"
             icon: "lightning-bolt"
             line_color: 0, 0, 0, 0
-            pos_hint: {"center_x": 0.5, "center_y": 0.63}
+            pos_hint: {"center_x": 0.5, "center_y": 0.66}
             on_release:
                 app.root.current = "map"
                 root.manager.transition.direction = "left"
@@ -118,7 +75,7 @@ WindowManager:
         # Second Button Image
         Image:
             source: 'assets/image/Button.png'
-            pos_hint: {"center_y": 0.42}
+            pos_hint: {"center_y": 0.45}
 
         MDRectangleFlatIconButton:
             id: new_station
@@ -127,7 +84,7 @@ WindowManager:
             font_name: "assets/fonts/Geddes_Bold.otf"
             icon: "map-plus"
             line_color: 0, 0, 0, 0
-            pos_hint: {"center_x": 0.5, "center_y": 0.43}
+            pos_hint: {"center_x": 0.5, "center_y": 0.46}
             on_release:
                 app.root.current = "new_station"
                 root.manager.transition.direction = "left"
@@ -140,15 +97,15 @@ WindowManager:
 
         MDLabel:
             text: "ev lodz"
-            font_size: "30sp"
+            font_size: "32sp"
             halign: "center"
             font_name: "assets/fonts/Nonchalance_R.otf"
-            pos_hint: {"center_y": 0.94}
+            pos_hint: {"center_x": 0.5, "center_y": 0.91}
 
         MDIconButton:
             icon: "information-outline"
             icon_size: "40sp"
-            pos_hint: {"center_x": 0.9, "center_y": 0.94}
+            pos_hint: {"center_x": 0.9, "center_y": 0.91}
             on_release:
                 app.root.current = "about"
                 root.manager.transition.direction = "up"
@@ -210,7 +167,7 @@ WindowManager:
         icon_color: app.theme_cls.primary_color
         pos_hint: {"center_x": .90, "center_y": .94}
         on_release:
-            root.search_stations()
+            root.open_search_window()
 
     MDIconButton:
         icon: "assets/image/GPS_icon.png"
@@ -218,42 +175,6 @@ WindowManager:
         pos_hint: {"center_x": 0.87, "center_y": 0.11}
         on_release:
             root.center_on_gps_location()
-
-<SearchStation>
-    name: "search_station" # defines the window id for ScreenManager
-    FloatLayout:
-        # Setting up the custom background image
-        Image:
-            source: 'assets/image/Scroll Group 1.png'
-            size_hint: None, None
-            pos: self.pos
-            size: root.size
-            keep_ratio: False
-            allow_stretch: True
-        Image:
-            source: 'assets/image/Map_top.png'
-            pos_hint: {"y": 0.45}
-            #size_hint_x: -0.3
-            #size_hint_y: 1.2
-            allow_stretch: True
-
-        MDIconButton:
-            icon: "assets/image/arrow_back.png"
-            icon_size: "40sp"
-            icon_color: app.theme_cls.primary_color
-            pos_hint: {"center_x": .12, "center_y": .94}
-            on_release:
-                app.root.current = "main"
-                root.manager.transition.direction = "right"
-                root.refresh()
-
-        MDTextField:
-            id: text_field_error
-            hint_text: "Helper text on error (press 'Enter')"
-            helper_text: "There will always be a mistake"
-            helper_text_mode: "on_error"
-            pos_hint: {"center_x": .3, "center_y": .82}
-            size_hint_x: .5
 
 <NewStationWindow>
     name: "new_station"
@@ -337,8 +258,6 @@ WindowManager:
             pos_hint: {"center_x": 0.46, "center_y": 0.13}
             on_release:
                 root.send_email_button()
-
-
 
 <AboutWindow>:
     name: "about" # defines the window id for ScreenManager

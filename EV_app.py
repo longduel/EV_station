@@ -5,14 +5,13 @@ from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy_garden.mapview import MapView
 from kivy.uix.popup import Popup
-from kivy.uix.button import Button
 from kivy.uix.screenmanager import ScreenManager, Screen
 # Classes to inherit
 from database_connector import DBConnection
 from station_maker import StationMarker
 from send_email import SendEmail
-from search_stations import SearchPopup
 from gps_blinker import GpsBlinker
+from search_station import SearchPopupMenu
 # Remove after testing to get the dynamic view
 Window.size = (300, 500)  # Using the kivy.core.window set up the dynamic screen size
 
@@ -21,8 +20,9 @@ Window.size = (300, 500)  # Using the kivy.core.window set up the dynamic screen
 class MainWindow(Screen):
     pass
 
+
 # Define Map Page
-class MapWindow(Screen, MapView, DBConnection,GpsBlinker):
+class MapWindow(Screen, MapView, DBConnection, GpsBlinker):
 
     get_station_timer = None
     search_menu = None
@@ -32,6 +32,10 @@ class MapWindow(Screen, MapView, DBConnection,GpsBlinker):
     def get_size(self):
         return Window.size
 
+    def open_search_window(self):
+        search_menu = SearchPopupMenu()
+        search_menu.open()
+
     # Stupid GPS Implementation that is breaking everything
     # Get a reference to GpsBlinker, then call blink()
     def gps_postion(self):
@@ -39,8 +43,6 @@ class MapWindow(Screen, MapView, DBConnection,GpsBlinker):
 
         # Start blinking the GpsBlinker
         test.blink()
-
-
     """
     # Get a reference to GpsBlinker, then call blink()
     def gps_postion(self):
@@ -148,27 +150,23 @@ class MapWindow(Screen, MapView, DBConnection,GpsBlinker):
         marker = StationMarker(lat=lat, lon=lon)
 
         marker.station_data = station
-        self.add_widget(marker)
+
+        # Populate the map with markers
+        # Loop through the logic that will make the marker different if the station  have live availability
+
+        if station[15] == 'NO':
+            marker.source = "assets/image/marker_station.png"
+            self.add_widget(marker)
+        elif station[2] == 'OFFLINE':
+            marker.source = "assets/image/marker_offline.png"
+            self.add_widget(marker)
+        else:
+            marker.source = "assets/image/marker_online.png"
+            self.add_widget(marker)
 
         name = station[1]
 
         self.station_name.append(name)
-
-    def search_stations(self):
-
-        search_menu = SearchPopup()
-        search_menu.open()
-
-
-# Define About Page DELETE WHEN DONE!!!!!!!!!
-class StationWindow(Screen, DBConnection):
-
-    def get_name(self):
-        i = 2
-        self.c.execute(f"SELECT * FROM stations_ev WHERE id = {i}")
-        text = self.c.fetchone()
-        self.ids.calc_input.text = f'{text[1]}'
-        return text
 
 
 # Define About Page
@@ -183,12 +181,6 @@ class AboutWindow(Screen):
             size_hint=(0.7, 0.25),
             pos_hint={'center_x': 0.5, 'center_y': 0.5})
         popup.open()
-
-
-# Define Search Station Page
-class SearchStation(Screen):
-    def refresh(self):
-        self.ids.text_field_error.text = " "
 
 
 # Define Request Page
