@@ -5,11 +5,11 @@
 #:include gps_blinker.kv
 # Root widgets they need to be first so the ScreenManger can load them in
 WindowManager:
-    SearchWindow
     MainWindow
     MapWindow
-    NewStationWindow
     AboutWindow
+    NewStationWindow
+    SearchWindow
 
 <GpsBlinker>:
     default_blink_size: 25
@@ -114,9 +114,8 @@ WindowManager:
 <MapWindow>:
     name: "map" # defines the window id for ScreenManager
     on_pre_enter:
-        root.centers_map()
-    #on_enter:
-    #    root.center_search()
+        root.center_map_search()
+
 
     size_hint: None, None
     size: root.get_size()
@@ -138,7 +137,7 @@ WindowManager:
         #lat: root.lat
         #lon: root.lon
         lat: 51.759445
-        lon: 19.557216
+        lon: 19.437216
         id: blinker
 
     Image:
@@ -181,9 +180,9 @@ WindowManager:
             root.center_on_gps_location()
 
 <SelectedButton>
-    on_release:
+    on_press:
         app.root.current = "map"
-        root.return_coordinates()
+        root.safe_name_of_search()
 
 <SearchWindow>
     name: "search"

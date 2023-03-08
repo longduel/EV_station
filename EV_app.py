@@ -1,4 +1,5 @@
 import re
+import sqlite3
 from kivy.lang import Builder
 from kivymd.app import MDApp
 from kivy.clock import Clock
@@ -16,6 +17,7 @@ from gps_blinker import GpsBlinker
 # Remove after testing to get the dynamic view
 Window.size = (300, 500)  # Using the kivy.core.window set up the dynamic screen size
 
+string_for_station_search = ''
 
 # Define Main Page
 class MainWindow(Screen):
@@ -23,30 +25,25 @@ class MainWindow(Screen):
 
 class SearchWindow(Screen):
     pass
-
 # Define Button that is on the search list and will return the lat and lon to the map widget
-class SelectedButton(MDFlatButton, DBConnection):
+class SelectedButton(MDFlatButton):
 
-    # Return the position of the chosen place when the button is pressed
-    def return_coordinates(self):
-        print(self.text)
+    def safe_name_of_search(self):
 
-        self.c.execute(f"SELECT * FROM stations_ev WHERE Name LIKE '%{self.text}%'")
-        station = self.c.fetchall()
-        lan = station[0][23]
-        lon = station[0][24]
-
-        search_lan = NumericProperty(lan)
-        search_lon = NumericProperty(lon)
+        # Clear the file
+        with open("transfer.txt", "w"):
+            pass
+        # Write the search to the file
+        with open("transfer.txt", "w", encoding="utf-8") as file:
+            file.write(self.text)
 
 # Define Map Page
-class MapWindow(Screen, MapView, DBConnection, GpsBlinker):
+class MapWindow(Screen, MapView, DBConnection):
 
     get_station_timer = None
     search_menu = None
     station_name = []
-    search_lan = NumericProperty(0)
-    search_lon = NumericProperty(0)
+
     # Return the size of the window so the map can dynamically resize and center on the specified position
     def get_size(self):
         return Window.size
@@ -124,24 +121,37 @@ class MapWindow(Screen, MapView, DBConnection, GpsBlinker):
         self.dialog.open()
         self.dialog = None
     """
-    def center_search(self):
+    def center_map_search(self):
 
-        self.search_lan = self.manager.get_screen('search').search_lan
-        self.search_lon = self.manager.get_screen('search').search_lon
-        self.lat = self.search_lan
-        self.lon = self.search_lon
-        self.zoom = 13
+        with open("transfer.txt", "r",  encoding="utf-8") as file:
+            line = file.readline()
+        print(line)
+        if line == '':
+            self.lat = 51.759445
+            self.lon = 19.457216
+            self.zoom = 10
+        else:
+            cursor = DBConnection()
+            cursor.c.execute(f"SELECT * FROM stations_ev WHERE Name LIKE '%{line}%'")
+            station = cursor.c.fetchall()
+            lan_from_the_search = station[0][23]
+            lon_from_the_search = station[0][24]
+            self.lat = lan_from_the_search
+            self.lon = lon_from_the_search
+            self.zoom = 18
+
 
     def center_on_gps_location(self):
         # Get the lon and center values from the function arguments
         self.lat = 51.759445
-        self.lon = 19.557216
+        self.lon = 19.442216
         self.zoom = 13
-
-    def centers_map(self):
+    def center_map(self):
+        # Get the lon and center values from the function arguments
         self.lat = 51.759445
-        self.lon = 19.457216
+        self.lon = 19.437216
         self.zoom = 10
+
 
     # safeguard for user scrolling too much the position of the
     # markers will not be updated constantly just every 1 second

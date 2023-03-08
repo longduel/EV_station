@@ -27,9 +27,8 @@ class RV(RecycleView):
         self.data = [{'text': f'{i}'} for i in self.station_name]
 
     def search_rv(self, text):
+
         if not text:
             self.init_data()
-            print(text)
         else:
-            print(text)
             self.data = [x for x in self.data if text.upper() in x['text'].upper()]
