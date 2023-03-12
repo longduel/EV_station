@@ -29,13 +29,18 @@ class SearchWindow(Screen):
 class SelectedButton(MDFlatButton):
 
     def safe_name_of_search(self):
+        #global string_for_station_search
+        #string_for_station_search = ''
+        #string_for_station_search = self.text
+
 
         # Clear the file
         with open("transfer.txt", "w"):
             pass
-        # Write the search to the file
+         #Write the search to the file
         with open("transfer.txt", "w", encoding="utf-8") as file:
             file.write(self.text)
+        print('Koncze button')
 
 # Define Map Page
 class MapWindow(Screen, MapView, DBConnection):
@@ -43,7 +48,6 @@ class MapWindow(Screen, MapView, DBConnection):
     get_station_timer = None
     search_menu = None
     station_name = []
-
     # Return the size of the window so the map can dynamically resize and center on the specified position
     def get_size(self):
         return Window.size
@@ -125,20 +129,32 @@ class MapWindow(Screen, MapView, DBConnection):
 
         with open("transfer.txt", "r",  encoding="utf-8") as file:
             line = file.readline()
-        print(line)
+        #global string_for_station_search
+        #line = string_for_station_search
+        print("Jestem w center_map_serach")
+        print(f'what is in the line: {line}')
+
+        lan_from_the_search = 0
+        lan_from_the_search = 0
+
         if line == '':
             self.lat = 51.759445
             self.lon = 19.457216
-            self.zoom = 10
+            self.zoom = 11
         else:
+            # Clear the file
+            with open("transfer.txt", "w"):
+                pass
             cursor = DBConnection()
             cursor.c.execute(f"SELECT * FROM stations_ev WHERE Name LIKE '%{line}%'")
             station = cursor.c.fetchall()
-            lan_from_the_search = station[0][23]
-            lon_from_the_search = station[0][24]
-            self.lat = lan_from_the_search
-            self.lon = lon_from_the_search
+            self.lan_from_the_search = station[0][23]
+            self.lon_from_the_search = station[0][24]
+
+            self.lat = self.lan_from_the_search
+            self.lon = self.lon_from_the_search
             self.zoom = 18
+
 
 
     def center_on_gps_location(self):
@@ -306,6 +322,9 @@ class WindowManager(ScreenManager):
 # Builder is for the .kv file to load as the Kivy Graphic Design
 class MainApp(MDApp):
 
+    # Clear the file
+    with open("transfer.txt", "w"):
+        pass
     def build(self):
         self.title = "Test app"
         self.theme_cls.primary_palette = "Blue"

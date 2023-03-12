@@ -38,10 +38,11 @@ class LocationPopUp(ListMDDialog):
 
             self.picture_locations = (picture_1, picture_2, picture_3)
         except IndexError:
-            picture_1 = f'{station_data[2]}//{picture_dir[0]}'
-            picture_2 = f'{station_data[2]}//{picture_dir[1]}'
+            picture_1 = "assets//image//No_photo.png"
+            picture_2 = "assets//image//No_photo.png"
+            picture_3 = "assets//image//No_photo.png"
 
-            self.picture_locations = (picture_1, picture_2)
+            self.picture_locations = (picture_1, picture_2, picture_3)
             print('Lest pictures than 3')
 
         if station_data[14] != 'NO':
@@ -83,6 +84,12 @@ class LocationPopUp(ListMDDialog):
             plug_live = data['connectors'][0]['availability']['current']['available']
             plugs_availability_formatted = f'{plug_live}/{all_plugs}'
             return plugs_availability_formatted
+        except IndexError:
+            plugs_availability_formatted = all_plugs
+            return plugs_availability_formatted
+            print("Issue with indexing")
         except RuntimeError:
+            plugs_availability_formatted = all_plugs
+            return plugs_availability_formatted
             print("Issues with API")
 
