@@ -47,10 +47,9 @@ class LocationPopUp(ListMDDialog):
             print('Lest pictures than 3')
 
         if station_data[14] != 'NO':
-            how_many_available = self.plugs_availability_rt(station_data[14], station_data[11])
             temp_station_data = list(station_data)
-            temp_station_data[11] = how_many_available
-            station_data = tuple(temp_station_data)
+            how_many_available = self.plugs_availability_rt(temp_station_data)
+            station_data = tuple(how_many_available)
 
         for i in range(len(headers)):
             attribute_name = headers[i]
@@ -71,28 +70,63 @@ class LocationPopUp(ListMDDialog):
         picture_menu = Full_screen_picture(self.picture_locations)
         picture_menu.open()
 
-    def plugs_availability_rt(self, ID, all_plugs):
+    def plugs_availability_rt(self, one_station_table):
 
         try:
+            # make original to return if there is an issue with the API
+            backup_station_data = one_station_table
+            # take ID for the API call from the station record
+            ID = one_station_table[14]
             # open the sample file used
             file = open('store.txt')
             # read the content of the file opened
             content = file.readlines()
+            # decode KPI key
             TomTom_api_key = base64.b64decode(content[1]).decode("utf-8")
             URL = f"https://api.tomtom.com/search/2/chargingAvailability.json?key={TomTom_api_key}&chargingAvailability={ID}"
             r = requests.get(url=URL)
             data = r.json()
-            plug_live = data['connectors'][0]['availability']['current']['available']
-            plugs_availability_formatted = f'{plug_live}/{all_plugs}'
-            return plugs_availability_formatted
+            # check every type of plug
+            self.check_live_type2(data, one_station_table)
+            self.check_live_ccs(data, one_station_table)
+            self.check_live_chademo(data, one_station_table)
+
+            return one_station_table
 
         except IndexError:
-            plugs_availability_formatted = all_plugs
-            return plugs_availability_formatted
+            return backup_station_data
             print("Issue with indexing")
 
         except RuntimeError:
-            plugs_availability_formatted = all_plugs
-            return plugs_availability_formatted
+            return backup_station_data
             print("Issues with API")
 
+    def check_live_type2(self, json_exctract, station):
+
+        try:
+            type2_plug_total = json_exctract['connectors'][0]['total']
+            type2_plug_available = json_exctract['connectors'][0]['availability']['current']['available']
+            plug_availability_formatted = f'{type2_plug_available}/{type2_plug_total}'
+            station[11] = plug_availability_formatted
+        except IndexError:
+            pass
+
+    def check_live_ccs(self, json_exctract, station):
+
+        try:
+            css_plug_total = json_exctract['connectors'][2]['total']
+            css_plug_available = json_exctract['connectors'][2]['availability']['current']['available']
+            plug_availability_formatted = f'{css_plug_available}/{css_plug_total}'
+            station[12] = plug_availability_formatted
+        except IndexError:
+            pass
+
+    def check_live_chademo(self, json_exctract, station):
+
+        try:
+            chademo_plug_total = json_exctract['connectors'][1]['total']
+            chademo_plug_available = json_exctract['connectors'][1]['availability']['current']['available']
+            plug_availability_formatted = f'{chademo_plug_available}/{chademo_plug_total}'
+            station[13] = plug_availability_formatted
+        except IndexError:
+            pass
