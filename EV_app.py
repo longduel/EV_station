@@ -57,6 +57,8 @@ class MapWindow(Screen, MapView, DBConnection):
 
         # Start blinking the GpsBlinker
         test.blink()
+
+        print("lets test this sucker")
     """
     # Get a reference to GpsBlinker, then call blink()
     def gps_postion(self):
