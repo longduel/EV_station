@@ -17,30 +17,27 @@ from gps_blinker import GpsBlinker
 # Remove after testing to get the dynamic view
 Window.size = (300, 500)  # Using the kivy.core.window set up the dynamic screen size
 
-string_for_station_search = ''
 
 # Define Main Page
 class MainWindow(Screen):
     pass
 
+
 class SearchWindow(Screen):
     pass
+
 # Define Button that is on the search list and will return the lat and lon to the map widget
 class SelectedButton(MDFlatButton):
 
     def safe_name_of_search(self):
-        #global string_for_station_search
-        #string_for_station_search = ''
-        #string_for_station_search = self.text
-
 
         # Clear the file
         with open("transfer.txt", "w"):
             pass
-         #Write the search to the file
+        # Write the search to the file
         with open("transfer.txt", "w", encoding="utf-8") as file:
             file.write(self.text)
-        print('Koncze button')
+
 
 # Define Map Page
 class MapWindow(Screen, MapView, DBConnection):
@@ -129,10 +126,6 @@ class MapWindow(Screen, MapView, DBConnection):
 
         with open("transfer.txt", "r",  encoding="utf-8") as file:
             line = file.readline()
-        #global string_for_station_search
-        #line = string_for_station_search
-        print("Jestem w center_map_serach")
-        print(f'what is in the line: {line}')
 
         lan_from_the_search = 0
         lan_from_the_search = 0
@@ -185,7 +178,7 @@ class MapWindow(Screen, MapView, DBConnection):
         self.c.execute(
             f"SELECT * FROM stations_ev WHERE LAT > {min_lon} AND LAT < {max_lon} AND LON > {min_lat} AND LON < {max_lat}")
         stations = self.c.fetchall()
-        # print(len(stations))
+
         for station in stations:
             name = station[1]
             if name in self.station_name:
@@ -195,7 +188,6 @@ class MapWindow(Screen, MapView, DBConnection):
 
     def sql_add_stations_to_map(self, station):
 
-        # print(len(station))
         lat, lon = station[23], station[24]
         marker = StationMarker(lat=lat, lon=lon)
 
