@@ -1,6 +1,6 @@
 from kivy_garden.mapview import MapMarker
 from kivy.animation import Animation
-
+# Class for the blinker entity created on the map widget
 
 class GpsBlinker(MapMarker):
 

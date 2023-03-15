@@ -1,5 +1,4 @@
 import re
-import sqlite3
 from kivy.lang import Builder
 from kivymd.app import MDApp
 from kivy.clock import Clock
@@ -8,14 +7,14 @@ from kivy_garden.mapview import MapView
 from kivy.uix.popup import Popup
 from kivymd.uix.button import MDFlatButton
 from kivy.uix.screenmanager import ScreenManager, Screen
-
 # Classes to inherit
 from database_connector import DBConnection
 from station_maker import StationMarker
 from send_email import SendEmail
-from gps_blinker import GpsBlinker
+
 # Remove after testing to get the dynamic view
-Window.size = (300, 500)  # Using the kivy.core.window set up the dynamic screen size
+# Using the kivy.core.window set up the dynamic screen size
+Window.size = (300, 500)
 
 
 # Define Main Page
@@ -25,6 +24,7 @@ class MainWindow(Screen):
 
 class SearchWindow(Screen):
     pass
+
 
 # Define Button that is on the search list and will return the lat and lon to the map widget
 class SelectedButton(MDFlatButton):
@@ -50,14 +50,13 @@ class MapWindow(Screen, MapView, DBConnection):
     def get_size(self):
         return Window.size
 
-
-    # Stupid GPS Implementation that is breaking everything
     def set_up_gps(self):
 
         home_gps_blinker = self.ids.blinker
         home_gps_blinker.blink()
 
     """
+    # Implementation for GPS device tracking
     # Request permissions on Android
         has_centered_map = False
         if platform == 'android':
@@ -142,13 +141,12 @@ class MapWindow(Screen, MapView, DBConnection):
             self.lon = self.lon_from_the_search
             self.zoom = 18
 
-
-
     def center_on_gps_location(self):
         # Get the lon and center values from the function arguments
         self.lat = 51.7714654904895
         self.lon = 19.483443589832355
         self.zoom = 16
+
     def center_map(self):
         # Get the lon and center values from the function arguments
         self.lat = 51.759445
@@ -156,8 +154,8 @@ class MapWindow(Screen, MapView, DBConnection):
         self.zoom = 10
 
 
-    # safeguard for user scrolling too much the position of the
-    # markers will not be updated constantly just every 1 second
+    # Safeguard for user scrolling too much the position of the
+    # Markers will not be updated constantly just every 1 second
     def set_station_markers(self):
         try:
             self.get_station_timer.cancel()
@@ -222,12 +220,14 @@ class AboutWindow(Screen):
 # Define Request Page
 class NewStationWindow(Screen, SendEmail):
 
+    # Refresh every on every exit
     def refresh(self):
         self.ids.spinner_id.text = "Pick Query"
         self.ids.full_name.text = " "
         self.ids.email.text = " "
         self.ids.additional_notes.text = " "
 
+    # Handling error popups
     def popup_invalid_submit(self, popup_text, move_popup):
         popup = Popup(title=f'{popup_text}',
                       background_color=(1, 0, 0, 1),
@@ -311,6 +311,7 @@ class MainApp(MDApp):
     # Clear the file
     with open("transfer.txt", "w"):
         pass
+
     def build(self):
         self.title = "Test app"
         self.theme_cls.primary_palette = "Blue"

@@ -3,7 +3,7 @@ import ssl
 import base64
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-
+# Class set up for the purpose of creating HTML email and sending to the support
 
 class SendEmail:
 

@@ -1,6 +1,7 @@
 from kivy_garden.mapview import MapMarkerPopup
 from locationpopout import LocationPopUp
-from database_connector import DBConnection
+# Initialize the station markers on map
+
 
 class StationMarker(MapMarkerPopup):
 

@@ -1,7 +1,7 @@
 import requests
 import base64
 from datetime import datetime
-
+# Class created for sorting through the Google API call
 
 class TouristPlaces:
 

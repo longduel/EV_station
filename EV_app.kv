@@ -3,7 +3,7 @@
 #:import GpsBlinker gps_blinker.GpsBlinker
 #:import RV search_station.RV
 #:include gps_blinker.kv
-# Root widgets they need to be first so the ScreenManger can load them in
+# ScreenManager below first in the list is the first to be loaded in
 WindowManager:
     MainWindow
     MapWindow
@@ -37,6 +37,7 @@ WindowManager:
             size_hint: (0.3,0.3)
             pos_hint: {"center_x": 0.5, "center_y": 0.24}
 
+        # Map button
         MDRectangleFlatIconButton:
             id: station_map
             text: "STATION MAP"
@@ -54,6 +55,7 @@ WindowManager:
             source: 'assets/image/Button.png'
             pos_hint: {"center_y": 0.45}
 
+        # New station button
         MDRectangleFlatIconButton:
             id: new_station
             text: "NEW STATION"
@@ -72,6 +74,7 @@ WindowManager:
             pos_hint: {"center_y": 0.12}
             #size: {10, 10}
 
+        # Logo on the top of the screen
         MDLabel:
             text: "ev lodz"
             font_size: "32sp"
@@ -79,6 +82,7 @@ WindowManager:
             font_name: "assets/fonts/Nonchalance_R.otf"
             pos_hint: {"center_x": 0.5, "center_y": 0.91}
 
+        # Button for the 'about' section
         MDIconButton:
             icon: "information-outline"
             icon_size: "40sp"
@@ -89,16 +93,13 @@ WindowManager:
 
 <MapWindow>:
     name: "map" # defines the window id for ScreenManager
+    # On map enter center and set up gps blinker every time
     on_enter:
         root.center_map_search()
         root.set_up_gps()
 
     size_hint: None, None
     size: root.get_size()
-
-    #lat: 51.759445
-    #lon: 19.457216
-    #zoom: 10
 
     double_tap_zoom: True
     snap_to_zoom: False
@@ -109,6 +110,7 @@ WindowManager:
     on_lon:
         root.set_station_markers()
 
+    # Gps position
     GpsBlinker:
         #lat: root.lat
         #lon: root.lon
@@ -116,6 +118,7 @@ WindowManager:
         lon: 19.483443589832355
         id: blinker
 
+    # Top banner map
     Image:
         source: 'assets/image/Map_top.png'
         pos_hint: {"y": 0.45}
@@ -123,6 +126,7 @@ WindowManager:
         #size_hint_y: 1.2
         allow_stretch: True
 
+    # Banner label
     MDLabel:
         id: calc_input
         text: "STATION MAP"
@@ -130,6 +134,7 @@ WindowManager:
         font_name: "assets/fonts/Poppins-Regular.ttf"
         pos_hint: {"x": 0.3, "y": 0.44}
 
+    # Button to go back to main menu
     MDIconButton:
         icon: "assets/image/arrow_back.png"
         icon_size: "40sp"
@@ -139,6 +144,7 @@ WindowManager:
             app.root.current = "main"
             root.manager.transition.direction = "right"
 
+    # Button to go to search window
     MDIconButton:
         icon: "magnify"
         icon_size: "40sp"
@@ -148,6 +154,7 @@ WindowManager:
             app.root.current = "search"
             root.manager.transition.direction = "up"
 
+    # Center map on GPS button
     MDIconButton:
         icon: "assets/image/GPS_icon.png"
         icon_size: "60sp"
@@ -156,12 +163,13 @@ WindowManager:
             root.center_on_gps_location()
 
 <SelectedButton>
+    # Select button on search window
     on_press:
         app.root.current = "map"
         root.safe_name_of_search()
 
 <SearchWindow>
-    name: "search"
+    name: "search" # defines the window id for ScreenManager
     Image:
         source: 'assets/image/Top1.png'
         size_hint: (1,0.2)
@@ -171,6 +179,7 @@ WindowManager:
         orientation: 'vertical'
     BoxLayout:
         orientation: 'vertical'
+        # Button to go back to map
         MDIconButton:
             icon: "assets/image/arrow_up.png"
             icon_size: "40sp"
@@ -179,6 +188,7 @@ WindowManager:
             on_release:
                 app.root.current = "map"
                 root.manager.transition.direction = "down"
+        # Text input
         MDTextField:
             id: search_input
             size_hint_y: None
@@ -186,6 +196,7 @@ WindowManager:
             fill_color: 0, 0, 0, .4
             hint_text: 'Enter name of the station:'
             on_text: rv.search_rv(self.text)
+        # Recycle list with station buttons
         RV:
             id: rv
             viewclass: 'SelectedButton'
@@ -197,10 +208,10 @@ WindowManager:
                 height: self.minimum_height
 
 <NewStationWindow>
-    name: "new_station"
+    name: "new_station" # defines the window id for ScreenManager
 
     FloatLayout:
-
+        # Setting up the custom background image
         Image:
             source: 'assets/image/Scroll Group 1.png'
             size_hint: None, None
@@ -218,6 +229,7 @@ WindowManager:
             font_name: "assets/fonts/Poppins-Regular.ttf"
             pos_hint: {"x": 0.25, "y": 0.44}
 
+        # Button to go back to main menu
         MDIconButton:
             icon: "assets/image/arrow_back.png"
             icon_size: "40sp"
@@ -227,6 +239,7 @@ WindowManager:
                 app.root.current = "main"
                 root.manager.transition.direction = "right"
                 root.refresh()
+        # Labels and text inputs for the email
         Label:
             text: "Full Name:"
             font_size: 16
@@ -268,6 +281,7 @@ WindowManager:
             pos_hint: {'center_x': 0.5, 'center_y': 0.33}
             size_hint: .92, .25
 
+        # Button to check and send email
         MDRectangleFlatIconButton:
             id: add_attachment
             text: "Send\nRequest"
@@ -298,6 +312,7 @@ WindowManager:
             #size_hint_y: 1.2
             allow_stretch: True
 
+        # Button to go back to main menu
         MDIconButton:
             icon: "assets/image/arrow_back.png"
             icon_size: "40sp"
@@ -307,6 +322,7 @@ WindowManager:
                 app.root.current = "main"
                 root.manager.transition.direction = "up"
 
+        # Labels for the about page
         MDLabel:
             text: "ABOUT THIS PROJECT"
             font_size: "20sp"
@@ -348,6 +364,7 @@ WindowManager:
                 font_name: "assets/fonts/NotoSansSymbols-VariableFont_wght.ttf"
                 pos_hint: {"center_x": 0.5, "center_y": 0.5}
 
+        # Button for GitHub page
         MDIconButton:
             icon: 'assets/image/Githubicon.png'
             icon_size: "70sp"
@@ -355,6 +372,7 @@ WindowManager:
             on_release:
                 webbrowser.open('https://github.com/longduel')
 
+        # Button for contact page popout
         MDIconButton:
             icon: 'assets/image/Gmailicon.png'
             icon_size: "70sp"

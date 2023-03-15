@@ -4,7 +4,8 @@ import base64
 from kivymd.uix.stationdetails import ListMDDialog
 from tourist_location import SearchTourist
 from full_screen_picture import Full_screen_picture
-
+# Class created for the purpose of setting up the station markers on the map widget
+# Also creating a modal for station info page and attraction page
 
 class LocationPopUp(ListMDDialog):
     picture_locations = ()

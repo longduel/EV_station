@@ -3,11 +3,11 @@ from kivymd.uix.menu import MDDropdownMenu
 from kivy.uix.floatlayout import FloatLayout
 from kivy.metrics import dp
 from tourist_places import TouristPlaces
-
+# Class created for tourist attraction screen
 
 class TouristAttraction(FloatLayout):
     def populate(self, x, lat, lon):
-        # Initializa class
+        # Initialize class
         process_class = TouristPlaces()
 
         # lat = '51.767172'
@@ -31,7 +31,6 @@ class TouristAttraction(FloatLayout):
             # Google maps url link
             self.url_first_place = first_place_formated_details[6]
 
-            # print(f"First place: {first_place_formated_details}")
         except IndexError:
             self.url_first_place = 'https://www.google.com/maps'
             print('No more places found')

@@ -1,4 +1,4 @@
-# Create class to it can be inherited by other classes later easily
+# Create class to it can be inherited by other classes later to easily connect with local database
 import sqlite3
 
 

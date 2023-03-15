@@ -1,4 +1,6 @@
 from kivymd.uix.stationdetails import ListMDDialogFullPicture
+# Class created to display station photos on full screen
+
 
 class Full_screen_picture(ListMDDialogFullPicture):
 
