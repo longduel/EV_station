@@ -45,6 +45,7 @@ class MapWindow(Screen, MapView, DBConnection):
     get_station_timer = None
     search_menu = None
     station_name = []
+
     # Return the size of the window so the map can dynamically resize and center on the specified position
     def get_size(self):
         return Window.size
@@ -57,14 +58,8 @@ class MapWindow(Screen, MapView, DBConnection):
         home_gps_blinker.blink()
 
     """
-    # Get a reference to GpsBlinker, then call blink()
-    def gps_postion(self):
-        home_gps_blinker = self.ids.blinker
-
-        # Start blinking the GpsBlinker
-        home_gps_blinker.blink()
-
     # Request permissions on Android
+        has_centered_map = False
         if platform == 'android':
             from android.permissions import Permission, request_permissions
             def callback(permission, results):
@@ -79,20 +74,23 @@ class MapWindow(Screen, MapView, DBConnection):
             request_permissions([Permission.ACCESS_COARSE_LOCATION,
                                  Permission.ACCESS_FINE_LOCATION], callback)
     def update_blinker_position(self, *args, **kwargs):
+        # For testing purposes
         my_lat = 51.759445
         my_lon = 19.657216
-
+        # Uncomment when ready and the app will be deployed
+        #my_lat = kwargs['lat']
+        #my_lon = kwargs['lon']
         print("GPS POSITION", my_lat, my_lon)
         # Update GpsBlinker position
         home_gps_blinker = self.ids.blinker
         home_gps_blinker.lat = my_lat
         home_gps_blinker.lon = my_lon
 
-        # if this will not be uncommented there is a wierd bug that is blinking weird
         # Center map on gps
         if not self.has_centered_map:
-            map2 = home_gps_blinker = self.ids.mapview
-            map2.center_on(my_lat, my_lon)
+            self.lat = my_lat
+            self.lon = my_lon
+            self.zoom = 16
             self.has_centered_map = True
 
         MDApp.get_running_app().current_lat = my_lat
@@ -125,9 +123,6 @@ class MapWindow(Screen, MapView, DBConnection):
 
         with open("transfer.txt", "r",  encoding="utf-8") as file:
             line = file.readline()
-
-        lan_from_the_search = 0
-        lan_from_the_search = 0
 
         if line == '':
             self.lat = 51.759445

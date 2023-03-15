@@ -16,7 +16,5 @@ class GpsBlinker(MapMarker):
         self.blink_size = self.default_blink_size
         self.blink()
 
-
-
     # blink --> outer_opacity = 0, blink_size = 30
     # reset --> outer_opacity = 1, blink_size = default = 15
