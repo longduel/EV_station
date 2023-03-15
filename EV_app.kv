@@ -11,30 +11,6 @@ WindowManager:
     NewStationWindow
     SearchWindow
 
-<GpsBlinker>:
-    default_blink_size: 25
-    blink_size: 5
-    source: 'venv/Lib/site-packages/kivymd/images/transparent.png'
-    outer_opacity: 1
-
-    canvas.before:
-        # Outer circle
-        Color:
-            rgba: app.theme_cls.primary_color[:3] + [root.outer_opacity]
-
-        RoundedRectangle:
-            radius: [root.blink_size/2.0, ]
-            size: [root.blink_size, root.blink_size]
-            pos: [root.pos[0] + root.size[0]/2.0 - root.blink_size/2.0, root.pos[1] + root.size[1]/2.0 - root.blink_size/2.0]
-
-        # Inner Circle
-        Color:
-            rgb: 1,1,1
-        RoundedRectangle:
-            radius: [root.default_blink_size/2.0, ]
-            size: [root.default_blink_size, root.default_blink_size]
-            pos: [root.pos[0] + root.size[0]/2.0 - root.default_blink_size/2.0, root.pos[1] + root.size[1]/2.0 - root.default_blink_size/2.0]
-
 <MainWindow>:
     name: "main" # defines the window id for ScreenManager
     FloatLayout:
@@ -115,7 +91,7 @@ WindowManager:
     name: "map" # defines the window id for ScreenManager
     on_enter:
         root.center_map_search()
-
+        root.set_up_gps()
 
     size_hint: None, None
     size: root.get_size()
@@ -136,8 +112,8 @@ WindowManager:
     GpsBlinker:
         #lat: root.lat
         #lon: root.lon
-        lat: 51.759445
-        lon: 19.437216
+        lat: 51.7714654904895
+        lon: 19.483443589832355
         id: blinker
 
     Image:

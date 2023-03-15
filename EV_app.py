@@ -8,7 +8,7 @@ from kivy_garden.mapview import MapView
 from kivy.uix.popup import Popup
 from kivymd.uix.button import MDFlatButton
 from kivy.uix.screenmanager import ScreenManager, Screen
-from kivy.properties import StringProperty, NumericProperty
+
 # Classes to inherit
 from database_connector import DBConnection
 from station_maker import StationMarker
@@ -51,14 +51,11 @@ class MapWindow(Screen, MapView, DBConnection):
 
 
     # Stupid GPS Implementation that is breaking everything
-    # Get a reference to GpsBlinker, then call blink()
-    def gps_postion(self):
-        test = GpsBlinker()
+    def set_up_gps(self):
 
-        # Start blinking the GpsBlinker
-        test.blink()
+        home_gps_blinker = self.ids.blinker
+        home_gps_blinker.blink()
 
-        print("lets test this sucker")
     """
     # Get a reference to GpsBlinker, then call blink()
     def gps_postion(self):
@@ -154,9 +151,9 @@ class MapWindow(Screen, MapView, DBConnection):
 
     def center_on_gps_location(self):
         # Get the lon and center values from the function arguments
-        self.lat = 51.759445
-        self.lon = 19.442216
-        self.zoom = 13
+        self.lat = 51.7714654904895
+        self.lon = 19.483443589832355
+        self.zoom = 16
     def center_map(self):
         # Get the lon and center values from the function arguments
         self.lat = 51.759445
